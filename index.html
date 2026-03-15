@@ -86,17 +86,17 @@ header{position:sticky;top:0;z-index:100;background:rgba(250,247,242,.95);backdr
 
 /* DETAIL OVERLAY */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;overflow-y:auto}
-.overlay.open{display:flex;justify-content:center;padding:40px 20px}
-.modal{background:var(--bg);width:100%;max-width:740px;border-radius:28px;overflow:hidden;align-self:flex-start;animation:slideUp .3s ease;position:relative}
+.overlay.open{display:flex;justify-content:center;padding:40px 20px;align-items:flex-start}
+.modal{background:var(--bg);width:100%;max-width:740px;border-radius:28px;overflow:hidden;align-self:flex-start;animation:slideUp .3s ease;position:relative;max-height:90vh;display:flex;flex-direction:column}
 @keyframes slideUp{from{transform:translateY(28px);opacity:0}to{transform:none;opacity:1}}
 .modal-x{position:absolute;top:14px;right:14px;z-index:10;background:rgba(255,255,255,.25);backdrop-filter:blur(8px);border:none;color:#fff;width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.m-hero{position:relative;height:320px}
+.m-hero{position:relative;height:320px;flex-shrink:0}
 .m-hero img{width:100%;height:100%;object-fit:cover}
 .m-hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent 50%)}
 .m-hero-txt{position:absolute;bottom:22px;left:26px;right:26px;color:#fff}
 .m-hero-txt h2{font-family:var(--serif);font-size:32px;font-weight:600;line-height:1.1;margin-bottom:5px}
 .m-hero-txt .reg{font-size:12px;text-transform:uppercase;letter-spacing:2px;opacity:.8}
-.m-body{padding:28px 28px 44px}
+.m-body{padding:28px 28px 44px;overflow-y:auto;flex:1}
 .m-sec{font-family:var(--serif);font-size:21px;margin:24px 0 14px}
 .ing-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer}
 .ing-row:last-child{border-bottom:none}
@@ -707,8 +707,8 @@ function openDetail(id) {
 
   (r.ingredients||[]).forEach(function(ing,i) {
     var isck = ck.has(i);
-    html += '<div class="ing-row'+(isck?' ck':'')+'" onclick="toggleIng(\''+id+'\','+i+',this)">'
-      +'<div class="ing-chk'+(isck?' on':'\'')+'>'+(isck?'<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</div>'
+    html += '<div class="ing-row'+(isck?' ck':'')+' " onclick="toggleIng(\''+id+'\','+i+',this)">'
+      +'<div class="ing-chk'+(isck?' on':'')+'">'      +(isck?'<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')      +'</div>'
       +'<span class="ing-name">'+ing.name+'</span><span class="ing-qty">'+(ing.qty||'')+'</span></div>';
   });
 
@@ -738,9 +738,20 @@ function openDetail(id) {
 
 function toggleIng(id,i,row) {
   if (!detailChecked[id]) detailChecked[id]=new Set();
-  var s=detailChecked[id], chk=row.querySelector('.ing-chk');
-  if(s.has(i)){s.delete(i);row.classList.remove('ck');chk.classList.remove('on');chk.innerHTML='';}
-  else{s.add(i);row.classList.add('ck');chk.classList.add('on');chk.innerHTML='<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
+  var s=detailChecked[id];
+  var chk=row.querySelector('.ing-chk');
+  if(!chk){console.warn('ing-chk not found in row',row);return;}
+  if(s.has(i)){
+    s.delete(i);
+    row.classList.remove('ck');
+    chk.classList.remove('on');
+    chk.innerHTML='';
+  } else {
+    s.add(i);
+    row.classList.add('ck');
+    chk.classList.add('on');
+    chk.innerHTML='<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
 }
 
 function closeDetail(){
