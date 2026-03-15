@@ -163,34 +163,48 @@ header{position:sticky;top:0;z-index:100;background:rgba(250,247,242,.97);backdr
 .ck-finish{background:#4CAF50;color:#fff}
 
 /* COOKING CHAT */
-.ck-chat-btn{position:fixed;bottom:90px;right:20px;z-index:600;background:var(--terra);color:#fff;border:none;border-radius:50%;width:52px;height:52px;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(196,97,74,.5);transition:transform .2s;display:none;align-items:center;justify-content:center}
+.ck-chat-btn{position:fixed;bottom:90px;right:20px;z-index:600;background:linear-gradient(135deg,var(--terra),#e07050);color:#fff;border:none;border-radius:28px;width:auto;padding:0 18px 0 14px;height:52px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 6px 24px rgba(196,97,74,.6);transition:all .25s cubic-bezier(.4,0,.2,1);display:none;align-items:center;justify-content:center;gap:8px;white-space:nowrap;letter-spacing:.2px}
 .ck-chat-btn.show{display:flex}
-.ck-chat-btn:hover{transform:scale(1.1)}
-.ck-chat-panel{position:fixed;bottom:0;right:0;z-index:601;width:100%;max-width:400px;height:60vh;background:#1c1c1c;border-radius:20px 20px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s ease;box-shadow:0 -8px 40px rgba(0,0,0,.5)}
+.ck-chat-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 10px 32px rgba(196,97,74,.7)}
+.ck-chat-btn:active{transform:scale(.97)}
+.ck-chat-btn .chat-icon{font-size:18px;line-height:1}
+.ck-chat-btn .chat-label{font-size:13px}
+.ck-chat-btn.open-state{border-radius:50%;width:52px;padding:0}
+.ck-chat-btn .chat-label.hide{display:none}
+.ck-chat-panel{position:fixed;bottom:0;right:0;z-index:601;width:100%;max-width:420px;height:65vh;background:#141414;border-radius:24px 24px 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:0 -12px 60px rgba(0,0,0,.6);border-top:1px solid rgba(255,255,255,.08)}
 .ck-chat-panel.open{transform:translateY(0)}
-.ck-chat-hdr{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.ck-chat-hdr-l{display:flex;align-items:center;gap:8px}
-.ck-chat-icon{width:30px;height:30px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;font-size:14px}
-.ck-chat-title{color:#fff;font-size:14px;font-weight:500}
-.ck-chat-sub{color:rgba(255,255,255,.4);font-size:11px}
-.ck-chat-x{background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;padding:4px 8px}
-.ck-msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
-.ck-msgs::-webkit-scrollbar{width:4px}
-.ck-msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
-.ck-msg{max-width:85%;padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.5}
-.ck-msg.user{background:var(--terra);color:#fff;align-self:flex-end;border-radius:14px 14px 4px 14px}
-.ck-msg.ai{background:rgba(255,255,255,.08);color:rgba(255,255,255,.9);align-self:flex-start;border-radius:14px 14px 14px 4px}
-.ck-msg.typing{background:rgba(255,255,255,.05);color:rgba(255,255,255,.4);align-self:flex-start;font-style:italic}
-.ck-quick{display:flex;gap:6px;padding:0 16px 8px;overflow-x:auto;flex-shrink:0}
+.ck-chat-hdr{padding:16px 18px 14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:rgba(255,255,255,.03)}
+.ck-chat-hdr-l{display:flex;align-items:center;gap:10px}
+.ck-chat-icon{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--terra),#e07050);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 3px 10px rgba(196,97,74,.4)}
+.ck-chat-title{color:#fff;font-size:14px;font-weight:600}
+.ck-chat-sub{color:rgba(255,255,255,.35);font-size:11px;margin-top:1px}
+.ck-chat-x{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.6);font-size:16px;cursor:pointer;padding:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.ck-chat-x:hover{background:rgba(255,255,255,.15);color:#fff}
+.ck-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.ck-msgs::-webkit-scrollbar{width:3px}
+.ck-msgs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:2px}
+.ck-msg{max-width:88%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.55;animation:msgIn .2s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ck-msg.user{background:linear-gradient(135deg,var(--terra),#d96a4a);color:#fff;align-self:flex-end;border-radius:16px 16px 4px 16px;box-shadow:0 3px 12px rgba(196,97,74,.35)}
+.ck-msg.ai{background:rgba(255,255,255,.09);color:rgba(255,255,255,.92);align-self:flex-start;border-radius:16px 16px 16px 4px;border:1px solid rgba(255,255,255,.07)}
+.ck-msg.typing{background:rgba(255,255,255,.05);color:rgba(255,255,255,.35);align-self:flex-start;font-style:italic;border-radius:16px;padding:12px 16px}
+.typing-dots{display:inline-flex;gap:4px;align-items:center}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35);animation:tdot 1.2s infinite ease-in-out}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1);opacity:1}}
+.ck-quick{display:flex;gap:6px;padding:8px 16px;overflow-x:auto;flex-shrink:0;border-top:1px solid rgba(255,255,255,.06)}
 .ck-quick::-webkit-scrollbar{display:none}
-.ck-q-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7);border-radius:16px;padding:5px 12px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:var(--sans);transition:all .2s;flex-shrink:0}
-.ck-q-btn:hover{background:rgba(196,97,74,.3);border-color:var(--terra);color:#fff}
-.ck-input-row{display:flex;gap:8px;padding:10px 14px 16px;flex-shrink:0;border-top:1px solid rgba(255,255,255,.07)}
-.ck-input{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:9px 14px;font-size:13px;color:#fff;font-family:var(--sans);outline:none;transition:border .2s}
-.ck-input:focus{border-color:var(--terra)}
-.ck-input::placeholder{color:rgba(255,255,255,.3)}
-.ck-send{background:var(--terra);color:#fff;border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
-.ck-send:hover{background:var(--terra2)}
+.ck-q-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.65);border-radius:20px;padding:6px 13px;font-size:11.5px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:var(--sans);transition:all .2s;flex-shrink:0;letter-spacing:.2px}
+.ck-q-btn:hover{background:rgba(196,97,74,.25);border-color:rgba(196,97,74,.5);color:#fff}
+.ck-q-btn:active{transform:scale(.95)}
+.ck-input-row{display:flex;gap:10px;padding:10px 16px 18px;flex-shrink:0;border-top:1px solid rgba(255,255,255,.07);align-items:flex-end}
+.ck-input{flex:1;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.1);border-radius:20px;padding:10px 16px;font-size:13.5px;color:#fff;font-family:var(--sans);outline:none;transition:border .2s,box-shadow .2s;resize:none;min-height:40px;max-height:100px;line-height:1.4}
+.ck-input:focus{border-color:var(--terra);box-shadow:0 0 0 3px rgba(196,97,74,.15)}
+.ck-input::placeholder{color:rgba(255,255,255,.25)}
+.ck-send{background:linear-gradient(135deg,var(--terra),#d96a4a);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;box-shadow:0 3px 10px rgba(196,97,74,.4)}
+.ck-send:hover{transform:scale(1.08);box-shadow:0 5px 16px rgba(196,97,74,.55)}
+.ck-send:active{transform:scale(.95)}
 
 /* ADD MODAL */
 #add-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;overflow-y:auto;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
@@ -444,7 +458,7 @@ footer p{font-size:13px;color:var(--muted)}
 </div>
 
 <!-- COOKING CHAT BUTTON -->
-<button class="ck-chat-btn" id="ck-chat-btn" onclick="toggleChat()" title="Chatta con lo Chef IA">💬</button>
+<button class="ck-chat-btn" id="ck-chat-btn" onclick="toggleChat()" title="Chatta con lo Chef IA"><span class="chat-icon">💬</span><span class="chat-label">Chiedi allo Chef</span></button>
 
 <!-- COOKING CHAT PANEL -->
 <div class="ck-chat-panel" id="ck-chat-panel">
@@ -456,8 +470,8 @@ footer p{font-size:13px;color:var(--muted)}
     <button class="ck-chat-x" onclick="toggleChat()">✕</button>
   </div>
   <div class="ck-msgs" id="ck-msgs"></div>
-  <div class="ck-quick">
-    <button class="ck-q-btn" onclick="quickMsg('Posso sostituire questo ingrediente?')">Sostituire ingrediente?</button>
+  <div class="ck-quick" id="ck-quick-btns">
+    <button class="ck-q-btn" onclick="quickMsg('Posso sostituire un ingrediente?')">Sostituire ingrediente?</button>
     <button class="ck-q-btn" onclick="quickMsg('Come capisco se è pronto?')">Come capisco se è pronto?</button>
     <button class="ck-q-btn" onclick="quickMsg('Ho sbagliato questo passo, come recupero?')">Ho sbagliato, come recupero?</button>
     <button class="ck-q-btn" onclick="quickMsg('Che temperatura devo usare?')">Che temperatura?</button>
@@ -804,7 +818,8 @@ function closeCooking() {
   var panel=document.getElementById('ck-chat-panel');
   panel.classList.remove('open');
   chatOpen=false;
-  document.getElementById('ck-chat-btn').textContent='💬';
+  document.getElementById('ck-chat-btn').innerHTML='<span class="chat-icon">💬</span><span class="chat-label">Chiedi allo Chef</span>';
+  document.getElementById('ck-chat-btn').classList.remove('open-state');
   chatHistory=[];
 }
 
@@ -865,7 +880,12 @@ function resetTimer(){
   var b=document.getElementById('tplay');if(b)b.textContent='\u25b6';
 }
 function clearCkTimer(){if(ckInterval){clearInterval(ckInterval);ckInterval=null;}ckRunning=false;}
-function ckMove(dir){clearCkTimer();ckStep=Math.max(0,Math.min((ckRecipe.steps||[]).length-1,ckStep+dir));renderCkStep();}
+function ckMove(dir){
+  clearCkTimer();
+  ckStep=Math.max(0,Math.min((ckRecipe.steps||[]).length-1,ckStep+dir));
+  renderCkStep();
+  updateQuickButtons(ckStep);
+}
 function finishCook(){clearCkTimer();closeCooking();showToast('\ud83c\udf89 Ricetta completata! Buon appetito!');}
 function fmtTime(s){
   if(s<=0)return'0:00';
@@ -881,14 +901,48 @@ function initChat() {
   chatHistory=[];
   var el=document.getElementById('ck-msgs');
   el.innerHTML='';
-  appendMsg('ai','Ciao! Sono qui per aiutarti con <strong>'+ckRecipe.title+'</strong>. Chiedimi qualsiasi cosa mentre cucini! 👨‍🍳');
+  var r=ckRecipe;
+  var welcome='Ciao! Sono il tuo Chef IA per <strong>'+r.title+'</strong> 👨‍🍳<br><br>';
+  welcome+='Ho già tutto il contesto della ricetta: '+r.ingredients.length+' ingredienti, '+(r.steps||[]).length+' passaggi. ';
+  welcome+='Chiedimi qualsiasi cosa — sostituzioni, tempi, tecniche o se qualcosa va storto!';
+  appendMsg('ai', welcome);
+  updateQuickButtons(0);
+}
+
+function updateQuickButtons(stepIdx) {
+  var r=ckRecipe;
+  if(!r)return;
+  var s=r.steps[stepIdx];
+  var stepTxt=typeof s==='string'?s:(s&&s.text)||'';
+  var hasTmr=s&&s.timer>0;
+  var quick=document.getElementById('ck-quick-btns');
+  if(!quick)return;
+  var suggestions=[
+    'Posso sostituire un ingrediente?',
+    'Come capisco se è pronto?',
+    hasTmr?'Posso ridurre il tempo?':'Quanto ci vuole questo passo?',
+    'Ho sbagliato, come recupero?',
+    'Che temperatura usare?',
+    'Consigli per non sbagliare?'
+  ];
+  quick.innerHTML=suggestions.map(function(q){
+    return '<button class="ck-q-btn" onclick="quickMsg(\''+q.replace(/'/g,"\\'")+'\')">'+q+'</button>';
+  }).join('');
 }
 
 function toggleChat() {
   chatOpen=!chatOpen;
-  document.getElementById('ck-chat-panel').classList.toggle('open',chatOpen);
-  document.getElementById('ck-chat-btn').textContent=chatOpen?'✕':'💬';
-  if(chatOpen)setTimeout(function(){document.getElementById('ck-input').focus();},300);
+  var panel=document.getElementById('ck-chat-panel');
+  var btn=document.getElementById('ck-chat-btn');
+  panel.classList.toggle('open',chatOpen);
+  if(chatOpen){
+    btn.innerHTML='<span class="chat-icon" style="font-size:18px">✕</span>';
+    btn.classList.add('open-state');
+    setTimeout(function(){document.getElementById('ck-input').focus();},320);
+  } else {
+    btn.innerHTML='<span class="chat-icon">💬</span><span class="chat-label">Chiedi allo Chef</span>';
+    btn.classList.remove('open-state');
+  }
 }
 
 function quickMsg(q){document.getElementById('ck-input').value=q;sendChat();}
@@ -916,7 +970,8 @@ async function sendChat() {
   var r=ckRecipe;
   var s=r.steps[ckStep];
   var stepTxt=typeof s==='string'?s:s.text;
-  var ctx='Ricetta: '+r.title+' ('+r.region+'). Passo corrente ('+(ckStep+1)+'/'+(r.steps||[]).length+'): "'+stepTxt+'". Ingredienti: '+(r.ingredients||[]).map(function(g){return g.name+' '+g.qty;}).join(', ')+'. Note: '+(r.notes||[]).join('; ')+'.';
+  var allSteps=(r.steps||[]).map(function(x,i){return (i+1)+'. '+(typeof x==='string'?x:x.text);}).join(' | ');
+  var ctx='Ricetta: '+r.title+' ('+r.region+'). Stai al passo '+(ckStep+1)+' di '+(r.steps||[]).length+': "'+stepTxt+'". Tutti i passi: '+allSteps+'. Ingredienti: '+(r.ingredients||[]).map(function(g){return g.name+' '+g.qty;}).join(', ')+'. Note autenticità: '+(r.notes||[]).join('; ')+'.';
   try {
     var mistralChatMsgs=[{role:'system',content:'Sei uno chef esperto che assiste l\'utente mentre cucina nell\'app Autentico. Rispondi in italiano, BREVE e PRATICO (max 3-4 frasi). Contesto: '+ctx}].concat(chatHistory.map(function(m){return{role:m.role==='assistant'?'assistant':'user',content:m.content};}));
     var res=await fetch('https://api.mistral.ai/v1/chat/completions',{
