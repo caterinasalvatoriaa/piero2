@@ -326,12 +326,12 @@ footer p{font-size:13px;color:var(--muted)}
 </footer>
 
 <!-- DETAIL OVERLAY -->
-<div class="overlay" id="detail-overlay" onclick="maybeCloseDetail(event)">
+<div class="overlay" id="detail-overlay">
   <div class="modal" id="detail-modal"></div>
 </div>
 
 <!-- ADD OVERLAY -->
-<div id="add-overlay" onclick="maybeCloseAdd(event)">
+<div id="add-overlay">
   <div class="add-modal" id="add-modal-box">
     <button style="position:absolute;top:16px;right:16px;background:#eee;color:#333;width:34px;height:34px;border:none;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:2" onclick="closeAdd()">✕</button>
 
@@ -730,7 +730,9 @@ function openDetail(id) {
   html += '<div class="m-cta"><button class="btn-start" onclick="closeDetail();startCooking(\''+r.id+'\')">🍳 Inizia a Cucinare</button></div></div>';
 
   document.getElementById('detail-modal').innerHTML = html;
-  document.getElementById('detail-overlay').classList.add('open');
+  var ov=document.getElementById('detail-overlay');
+  ov.classList.add('open');
+  ov.scrollTop=0;
   document.body.style.overflow = 'hidden';
 }
 
@@ -741,8 +743,16 @@ function toggleIng(id,i,row) {
   else{s.add(i);row.classList.add('ck');chk.classList.add('on');chk.innerHTML='<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';}
 }
 
-function closeDetail(){document.getElementById('detail-overlay').classList.remove('open');document.body.style.overflow='';}
-function maybeCloseDetail(e){if(e.target===document.getElementById('detail-overlay'))closeDetail();}
+function closeDetail(){
+  document.getElementById('detail-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function maybeCloseDetail(e){
+  if(e.target===document.getElementById('detail-overlay'))closeDetail();
+}
+document.getElementById('detail-overlay').addEventListener('click',function(e){
+  if(e.target===this)closeDetail();
+});
 
 // =============================================
 // COOKING MODE
@@ -765,11 +775,13 @@ function closeCooking() {
   clearCkTimer();
   document.getElementById('ck-screen').classList.remove('open');
   document.body.style.overflow='';
-  if(document.fullscreenElement) document.exitFullscreen().catch(function(){});
+  if(document.fullscreenElement){document.exitFullscreen().catch(function(){});}
   document.getElementById('ck-chat-btn').classList.remove('show');
-  document.getElementById('ck-chat-panel').classList.remove('open');
+  var panel=document.getElementById('ck-chat-panel');
+  panel.classList.remove('open');
   chatOpen=false;
   document.getElementById('ck-chat-btn').textContent='💬';
+  chatHistory=[];
 }
 
 function renderCkStep() {
@@ -886,13 +898,10 @@ async function sendChat() {
     var res=await fetch('https://api.mistral.ai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},
-      body:JSON.stringify({
-        model:'mistral-small-latest',
-        max_tokens:300,
-        messages:mistralChatMsgs
-      })
+      body:JSON.stringify({model:'mistral-small-latest',max_tokens:300,messages:mistralChatMsgs})
     });
     var data=await res.json();
+    if(!res.ok)throw new Error(data.message||'API error '+res.status);
     var reply=(data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||'Non ho capito, riprova!';
     chatHistory.push({role:'assistant',content:reply});
     var tel=document.getElementById(tid);
@@ -917,8 +926,16 @@ function openAdd() {
   document.getElementById('add-overlay').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function closeAdd(){document.getElementById('add-overlay').classList.remove('open');document.body.style.overflow='';}
-function maybeCloseAdd(e){if(e.target===document.getElementById('add-overlay'))closeAdd();}
+function closeAdd(){
+  document.getElementById('add-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function maybeCloseAdd(e){
+  if(e.target===document.getElementById('add-overlay'))closeAdd();
+}
+document.getElementById('add-overlay').addEventListener('click',function(e){
+  if(e.target===this)closeAdd();
+});
 
 function showPhase(n) {
   [1,2,3].forEach(function(i){
@@ -952,25 +969,36 @@ async function runAI() {
   var mlb=document.getElementById('ai-load-msg');
   var miv=setInterval(function(){mlb.textContent=msgs[Math.min(++mi,msgs.length-1)];},1400);
   try {
+    var prompt='Sei un esperto culinario. Struttura la ricetta in JSON PURO. Rispondi SOLO con il JSON, senza markdown, senza testo prima o dopo. Formato ESATTO: {"title":"...","region":"...","country":"uno tra Italia|Giappone|Spagna|Francia|Messico|India|Grecia|Marocco|Altro","time":30,"description":"...","ingredients":[{"name":"...","qty":"..."}],"steps":[{"text":"...","timer":0}],"notes":["..."],"changes":["..."]}. Regole: timer in secondi (0 se nessuno). Ricetta da strutturare:\n\n'+raw;
     var res=await fetch('https://api.mistral.ai/v1/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+MISTRAL_KEY},
       body:JSON.stringify({
         model:'mistral-small-latest',
-        max_tokens:1000,
-        messages:[{role:'user',content:'Sei un esperto culinario per l\'app Autentico. Struttura la ricetta in JSON. Rispondi SOLO con JSON valido, nessun testo fuori, nessun markdown. Formato: {"title":"...","region":"...","country":"uno di Italia|Giappone|Spagna|Francia|Messico|India|Grecia|Marocco|Altro","time":numero,"description":"...","ingredients":[{"name":"...","qty":"..."}],"steps":[{"text":"...","timer":secondi_o_0}],"notes":["..."],"changes":["..."]}. Sii fedele alla ricetta originale. Se mancano quantità usa q.b. e segnalalo nei changes.\n\nStruttura questa ricetta:\n\n'+raw}]
+        max_tokens:1500,
+        temperature:0.1,
+        messages:[
+          {role:'system',content:'Sei un esperto culinario. Rispondi SEMPRE e SOLO con JSON valido, niente testo aggiuntivo, niente markdown.'},
+          {role:'user',content:prompt}
+        ]
       })
     });
     clearInterval(miv);
+    if(!res.ok){var errData=await res.json().catch(function(){return{};});throw new Error('Errore API '+res.status+': '+(errData.message||''));}
     var data=await res.json();
     var txt=(data.choices&&data.choices[0]&&data.choices[0].message&&data.choices[0].message.content)||'';
-    if(!txt){console.error('Empty Claude response:', data);throw new Error('Empty response');}
-    txt=txt.replace(/```json/g,'').replace(/```/g,'').trim();
+    if(!txt){throw new Error('Risposta vuota dall\'IA');}
+    // Estrai JSON robusto
+    txt=txt.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
     var jsonStart=txt.indexOf('{');
     var jsonEnd=txt.lastIndexOf('}');
-    if(jsonStart===-1||jsonEnd===-1){throw new Error('No JSON');}
+    if(jsonStart===-1||jsonEnd===-1){throw new Error('Formato risposta non valido');}
     txt=txt.slice(jsonStart,jsonEnd+1);
-    var ai=JSON.parse(txt);
+    var ai;
+    try{ai=JSON.parse(txt);}catch(pe){
+      txt=txt.replace(/,\s*([}\]])/g,'$1');
+      ai=JSON.parse(txt);
+    }
     populateFields(ai);
   } catch(e) {
     clearInterval(miv);
@@ -1125,7 +1153,11 @@ function showToast(msg) {
 }
 
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){closeDetail();closeAdd();}
+  if(e.key==='Escape'){
+    closeDetail();
+    closeAdd();
+    if(chatOpen)toggleChat();
+  }
 });
 
 // =============================================
